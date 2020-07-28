@@ -83,7 +83,7 @@ The `erl_initrc` file need to contain a name server and dns details in order to 
 
 ### application settings
 
-In Erlang, applications have their own little [`.app` file](tree/src/cuckoo.app.src) in which details of the application are provided. It is important that this file contains the dependencies, such that when building a release, the dependencies are also copied and started.
+In Erlang, applications have their own little [`.app` file](src/cuckoo.app.src) in which details of the application are provided. It is important that this file contains the dependencies, such that when building a release, the dependencies are also copied and started.
 
 ```erlang
 {application, cuckoo, [
@@ -109,9 +109,9 @@ In Erlang, applications have their own little [`.app` file](tree/src/cuckoo.app.
 
 # The Code
 
-Erlang applications are organized by supervision trees. There is one module [cuckoo.erl](tree/src/cuckoo.erl) that implements the logic of starting and stopping an application. This starts the top node of the supervision tree [cuckoo_sup.erl](tree/src/cuckoo_sup.erl). The code in those two modules is standard code. There is a bit of playing with the GRiSP leds to indicate. what went wrong when an error occurs in the startup phase, but nothing more.
+Erlang applications are organized by supervision trees. There is one module [cuckoo.erl](src/cuckoo.erl) that implements the logic of starting and stopping an application. This starts the top node of the supervision tree [cuckoo_sup.erl](src/cuckoo_sup.erl). The code in those two modules is standard code. There is a bit of playing with the GRiSP leds to indicate. what went wrong when an error occurs in the startup phase, but nothing more.
 
-The supervision tree starts and monitors two processes. The first one [cuckoo_time.erl](tree/src/cuckoo_time.erl]) periodically grabs the time from the internet service worldtimeapi.org. This time is compared to the local grisp clock and the differnce is kept in the state of this process:
+The supervision tree starts and monitors two processes. The first one [cuckoo_time.erl](src/cuckoo_time.erl]) periodically grabs the time from the internet service worldtimeapi.org. This time is compared to the local grisp clock and the differnce is kept in the state of this process:
 ```erlang
 get_worldtime() ->
     {ok, ClientPid} = inets:start(httpc,
@@ -137,7 +137,7 @@ We start a web client, send a request, record the GRiSP local time directly afte
 
 We decode the json object that is returned by the server and get the properties `unixtime`, `dst` and in case DST is true, we get the `dst_offset`. The unix time is in seconds and points to universal time. There is a `raw_offset` that indicates how far we are from universal time and together with the DST offset we get the local time in seconds.
 
-The second. processes started by. the supervision tree [cuckoo_hour.erl](tree/src/cuckoo_hour.erl) checks the local clock (which is far cheaper than querying the internet) each second. We compute the hour from the local time using a standard library functions:
+The second. processes started by. the supervision tree [cuckoo_hour.erl](src/cuckoo_hour.erl) checks the local clock (which is far cheaper than querying the internet) each second. We compute the hour from the local time using a standard library functions:
 ```erlang
 local_hour() ->
     Local = cuckoo_time:local_time(),
