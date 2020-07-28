@@ -67,7 +67,7 @@ In order to parse that json we use the package `jsx`.
 
 ### GRiSP config
 
-GRiSP expects a few files to be placed in `grisp/grisp_base/files`. These files configure, for example the network interface. We want the GRiSP board to get an IPaddress from a local wifi and we hard-code the SSID and password in `wpa_supplicant.conf`. Make sure you change this file with your personal settings.
+GRiSP expects a few files to be placed in `grisp/grisp_base/files`. These files configure, for example the network interface. We want the GRiSP board to get an IPaddress from a local wifi and we hard-code the SSID and password in `wpa_supplicant.conf`. **Make sure you change [this file](grisp/grisp_base/files/wpa_supplicant.conf) with your personal settings**.
 
 The `erl_initrc` file need to contain a name server and dns details in order to have the web client talk to a named webservice:
 ```erlang
@@ -111,7 +111,7 @@ In Erlang, applications have their own little [`.app` file](src/cuckoo.app.src) 
 
 Erlang applications are organized by supervision trees. There is one module [cuckoo.erl](src/cuckoo.erl) that implements the logic of starting and stopping an application. This starts the top node of the supervision tree [cuckoo_sup.erl](src/cuckoo_sup.erl). The code in those two modules is standard code. There is a bit of playing with the GRiSP leds to indicate. what went wrong when an error occurs in the startup phase, but nothing more.
 
-The supervision tree starts and monitors two processes. The first one [cuckoo_time.erl](src/cuckoo_time.erl]) periodically grabs the time from the internet service worldtimeapi.org. This time is compared to the local grisp clock and the differnce is kept in the state of this process:
+The supervision tree starts and monitors two processes. The first one [cuckoo_time.erl](src/cuckoo_time.erl]) periodically grabs the time from the internet service worldtimeapi.org. This time is compared to the local grisp clock and the differnece is kept in the state of this process:
 ```erlang
 get_worldtime() ->
     {ok, ClientPid} = inets:start(httpc,
