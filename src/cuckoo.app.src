@@ -1,0 +1,19 @@
+{application, cuckoo, [
+    {description, "A GRiSP application to blink a led N times each Nth hour"},
+    {vsn, "1.0.0"},
+    {registered, []},
+    {mod, {cuckoo, []}},
+    {applications, [
+        kernel,
+        stdlib,
+        inets,
+        jsx,
+        grisp
+    ]},
+    {env,[]},
+    {modules, []},
+
+    {maintainers, ["Thomas Arts"]},
+    {licenses, ["MIT"]},
+    {links, []}
+]}.
